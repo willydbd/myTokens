@@ -11,20 +11,22 @@ contract Token {
         address indexed _to,
         uint256 _value
     );
-
+    //Approval event can be subscribe to when tansaction is approved
     event Approval(
         address indexed _owner,
         address indexed _spender,
         uint256 _value
     );
-
+    
     mapping(address => uint256) public balanceOf;
     mapping(address => mapping(address => uint256)) public allowance;
 
+    //contructor method get to only run once when deployed to blockchain
     constructor() public {
         balanceOf[msg.sender] = totalSupply;
     }
-
+    
+    //ERC-20 standardize tranfer function
     function transfer(address _to, uint256 _value) public returns (bool success) {
         require(balanceOf[msg.sender] >= _value);
         balanceOf[msg.sender] -= _value;
@@ -32,7 +34,7 @@ contract Token {
         emit Transfer(msg.sender, _to, _value);
         return true;
     }
-
+    //ERC-20 must have function(Approval), to allow contract spend token 
     function approve(address _spender, uint256 _value) public returns (bool success) {
         allowance[msg.sender][_spender] = _value;
         emit Approval(msg.sender, _spender, _value);
